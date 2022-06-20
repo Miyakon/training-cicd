@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+
+	"github.com/buildkite/interpolate"
 )
 
 func main() {
@@ -26,13 +28,10 @@ func main() {
 	fmt.Printf("%s", multi_line)
 
 	// fmt.Printf(GetHogeByGlue("piyo"))
-	mystr := GetHogeByGlue("piyo")
-	fmt.Printf("%s", mystr)
-
-	fmt.Printf("%s", GetHogeBySprintf("piyopiyo"))
-
-	fmt.Printf("%s", GetHogeByTemplate("piyopiyopiyo"))
-
+	fmt.Println(GetHogeByGlue("foo"))        // 文字列結合子（+）を使ったサンプル
+	fmt.Println(GetHogeBySprintf("foo"))     // fmt パッケージを使ったサンプル
+	fmt.Println(GetHogeByTemplate("foo"))    // template パッケージを使ったサンプル
+	fmt.Println(GetHogeByInterpolate("foo")) // interpolate パッケージを使ったサンプル
 }
 
 // 関数定義と文字列+変数
@@ -66,6 +65,16 @@ func GetHogeByTemplate(piyo string) string {
 	}
 
 	return msg_result.String()
+}
+
+func GetHogeByInterpolate(piyo string) string {
+	env := interpolate.NewSliceEnv([]string{
+		"Replace2=" + piyo,
+	})
+
+	output, _ := interpolate.Interpolate(env, "fuga ${Replace2} mogera ${Replace3:-🏖}")
+
+	return output
 }
 
 // コメント
