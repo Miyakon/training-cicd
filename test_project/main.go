@@ -6,6 +6,9 @@ import (
 	"html/template"
 	"log"
 
+	"encoding/json"
+	"net/http"
+
 	"github.com/buildkite/interpolate"
 )
 
@@ -32,6 +35,20 @@ func main() {
 	fmt.Println(GetHogeBySprintf("foo"))     // fmt パッケージを使ったサンプル
 	fmt.Println(GetHogeByTemplate("foo"))    // template パッケージを使ったサンプル
 	fmt.Println(GetHogeByInterpolate("foo")) // interpolate パッケージを使ったサンプル
+
+	// フレームワークを使わずにサーバを立てる
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, q *http.Request) {
+		message := map[string]string{
+			"message": "hello world",
+		}
+		jsonMessage, err := json.Marshal(message)
+		if err != nil {
+			panic(err.Error())
+		}
+		w.Write(jsonMessage)
+	})
+	http.ListenAndServe("127.0.0.1:3000", mux)
 }
 
 // 関数定義と文字列+変数
