@@ -1,3 +1,6 @@
+# Purpose
+- 簡単なWebサーバを用いてCICDを実装
+
 # Descriptions
 - Golangで作成
 - Ginワークフレームを使用した簡単なWebサーバー
