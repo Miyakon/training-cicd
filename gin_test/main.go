@@ -8,17 +8,14 @@ import (
 
 func main() {
 	engine := gin.Default()
-	ua := ""
-	// Use Middleware
-	engine.Use(func(c *gin.Context) {
-		ua = c.GetHeader("User-Agent")
-		c.Next()
-	})
+	// htmlのディレクトリを指定
+	engine.LoadHTMLGlob("templates/*")
 	engine.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message":    "hello world",
-			"User-Agent": ua,
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			// htmlに渡す変数を定義
+			"message": "hello gin",
 		})
 	})
+	engine.Static("/static", "./static")
 	engine.Run(":3000")
 }
